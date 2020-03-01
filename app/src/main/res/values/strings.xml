@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Barbershop</string>
+    <string name="go_to_log_in">Sign In</string>
+    <string name="log_in_logo">log_in_logo</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="submit">Submit</string>
+</resources>
