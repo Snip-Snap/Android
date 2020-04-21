@@ -1,0 +1,35 @@
+query getBarbers{
+    getAllBarbers {
+        barberID
+        shopID
+        userName
+        firstName
+        lastName
+        PhoneNumber
+        gender
+        dob
+        hireDate
+        dismissDate
+        seatNum
+    }
+}
+
+mutation insertBarber {
+    signUpBarber(
+        input: {
+            shopID: 9
+            userName: "Nandi123"
+            password: "abz4588xyz"
+            firstName: "Nan"
+            lastName: "Do"
+            PhoneNumber: "737-59-3277"
+            gender: "M"
+            dob:"2002-04-02"
+            hireDate: "2018-12-04"
+            dismissDate: null
+            seatNum: 4
+        }
+    ) {
+        error
+    }
+}
