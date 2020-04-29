@@ -1,13 +1,15 @@
 <resources>
     <string name="app_name">Barbershop</string>
-    <string name="go_to_log_in">Sign In</string>
-    <string name="log_in_logo">log_in_logo</string>
     <string name="username">Username</string>
     <string name="password">Password</string>
     <string name="submit">Submit</string>
-    <string name="landing_page_greeting">Welcome to</string>
     <string name="query_barbers">query barbers</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="organization_logo">Organization logo</string>
+    <string name="welcome_to">Welcome to</string>
+    <string name="account_needed_q">Need an account?</string>
+    <string name="sign_up">Sign Up.</string>
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="register">Register</string>
+    <string name="login">Login</string>
 </resources>

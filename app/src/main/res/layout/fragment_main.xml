@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mainFragmentLayout"
@@ -8,42 +7,48 @@
     android:layout_height="match_parent"
     tools:context=".fragment.MainFragment">
 
-    <ImageView
-        android:id="@+id/logo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="#FFFFFF"
-        android:contentDescription="@string/app_name"
-        android:scaleType="fitCenter"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0"
-        app:srcCompat="@drawable/snip_snap" />
-
     <TextView
         android:id="@+id/landing_page_greeting"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/landing_page_greeting"
+        android:text="@string/welcome_to"
         android:textAppearance="@style/TextAppearance.AppCompat.Display3"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.587"
+        app:layout_constraintHorizontal_bias="0.578"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.144" />
+        app:layout_constraintVertical_bias="0.068" />
 
     <Button
-        android:id="@+id/queryBarbers"
+        android:id="@+id/btn_queryBarbers"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
         android:text="@string/query_barbers"
-        app:layout_constraintBottom_toBottomOf="@+id/logo"
+        app:layout_constraintEnd_toEndOf="@+id/IMGV_snipsnap_home"
+        app:layout_constraintStart_toStartOf="@+id/IMGV_snipsnap_home"
+        app:layout_constraintTop_toBottomOf="@+id/IMGV_snipsnap_home" />
+
+    <ImageView
+        android:id="@+id/IMGV_snipsnap_home"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:src="@drawable/snip_snap_logo"
         app:layout_constraintEnd_toEndOf="@+id/landing_page_greeting"
         app:layout_constraintStart_toStartOf="@+id/landing_page_greeting"
         app:layout_constraintTop_toBottomOf="@+id/landing_page_greeting"
-        app:layout_constraintVertical_bias="0.764" />
+        style="@style/snipsnap_logo_big"
+        android:contentDescription="@string/organization_logo" />
+
+    <Button
+        android:id="@+id/BTN_login"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="@string/login"
+        app:layout_constraintEnd_toEndOf="@+id/btn_queryBarbers"
+        app:layout_constraintStart_toStartOf="@+id/btn_queryBarbers"
+        app:layout_constraintTop_toBottomOf="@+id/btn_queryBarbers" />
 </androidx.constraintlayout.widget.ConstraintLayout>
