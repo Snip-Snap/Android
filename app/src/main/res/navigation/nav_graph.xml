@@ -11,7 +11,8 @@
         tools:layout="@layout/fragment_main" >
         <action
             android:id="@+id/action_mainFragment_to_loginFragment"
-            app:destination="@id/loginFragment" />
+            app:destination="@id/loginFragment"
+            app:enterAnim="@anim/fragment_open_enter" />
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
@@ -23,7 +24,8 @@
             app:destination="@id/signupFragment" />
         <action
             android:id="@+id/action_loginFragment_to_signupFragment2"
-            app:destination="@id/signupFragment" />
+            app:destination="@id/signupFragment"
+            app:popUpToInclusive="false" />
     </fragment>
     <fragment
         android:id="@+id/signupFragment"

@@ -10,13 +10,15 @@
 
     <ImageView
         android:id="@+id/IMGV_snipsnap_login"
-        android:src="@drawable/snip_snap_logo"
+        android:layout_width="136dp"
+        android:layout_height="167dp"
+        android:layout_marginTop="24dp"
+        android:contentDescription="@string/organization_logo"
+        android:src="@drawable/snipsnap_word_logo"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        style="@style/snipsnap_logo_big"
-        android:contentDescription="@string/organization_logo" />
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
 
     <EditText
         android:id="@+id/TXT_username"
@@ -60,23 +62,33 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/account_needed_q"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/TXT_password"
-        app:layout_constraintTop_toBottomOf="@+id/BTN_login"
-        app:layout_constraintVertical_bias="0.919" />
+        app:layout_constraintBaseline_toBaselineOf="@+id/TXTV_signup"
+        app:layout_constraintEnd_toStartOf="@+id/TXTV_signup"
+        app:layout_constraintHorizontal_bias="0.977"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/TXTV_signup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="116dp"
+        android:layout_marginBottom="36dp"
         android:text="@string/sign_up"
         android:textColor="#E91E63"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/TXT_password"
-        app:layout_constraintHorizontal_bias="0.05"
-        app:layout_constraintStart_toEndOf="@+id/TXTV_need_account"
-        app:layout_constraintTop_toBottomOf="@+id/BTN_login"
-        app:layout_constraintVertical_bias="0.919" />
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="@string/login"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
