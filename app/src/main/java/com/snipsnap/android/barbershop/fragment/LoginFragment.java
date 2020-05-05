@@ -24,6 +24,7 @@ import org.jetbrains.annotations.NotNull;
 public class LoginFragment extends Fragment {
     private FragmentLoginBinding loginBinding;
     private TextView txtv_signup;
+    private Button btn_submit;
 
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater,
@@ -40,6 +41,7 @@ public class LoginFragment extends Fragment {
                               @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         txtv_signup = loginBinding.TXTVSignup;
+        btn_submit = loginBinding.BTNLogin;
     }
 
     @Override
@@ -50,6 +52,12 @@ public class LoginFragment extends Fragment {
                     .actionLoginFragmentToSignupFragment();
             Navigation.findNavController(loginBinding.getRoot())
                     .navigate(toSignup);
+        });
+        btn_submit.setOnClickListener( l -> {
+            NavDirections toLogin = LoginFragmentDirections
+                    .actionLoginFragmentToCalendarFragment();
+            Navigation.findNavController(loginBinding.getRoot())
+                    .navigate(toLogin);
         });
     }
 }
