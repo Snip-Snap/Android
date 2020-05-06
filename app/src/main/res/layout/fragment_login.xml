@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/login_layout"
@@ -21,7 +22,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView" />
 
     <EditText
-        android:id="@+id/TXT_username"
+        android:id="@+id/ETXT_username"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
@@ -34,7 +35,7 @@
         app:layout_constraintTop_toBottomOf="@+id/IMGV_snipsnap_login" />
 
     <EditText
-        android:id="@+id/TXT_password"
+        android:id="@+id/ETXT_password"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
@@ -42,10 +43,10 @@
         android:ems="10"
         android:hint="@string/password"
         android:inputType="textPassword"
-        app:layout_constraintEnd_toEndOf="@+id/TXT_username"
+        app:layout_constraintEnd_toEndOf="@+id/ETXT_username"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/TXT_username"
-        app:layout_constraintTop_toBottomOf="@+id/TXT_username" />
+        app:layout_constraintStart_toStartOf="@+id/ETXT_username"
+        app:layout_constraintTop_toBottomOf="@+id/ETXT_username" />
 
     <Button
         android:id="@+id/BTN_login"
@@ -53,9 +54,9 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:text="@string/submit"
-        app:layout_constraintEnd_toEndOf="@+id/TXT_password"
-        app:layout_constraintStart_toStartOf="@+id/TXT_password"
-        app:layout_constraintTop_toBottomOf="@+id/TXT_password" />
+        app:layout_constraintEnd_toEndOf="@+id/ETXT_password"
+        app:layout_constraintStart_toStartOf="@+id/ETXT_password"
+        app:layout_constraintTop_toBottomOf="@+id/ETXT_password" />
 
     <TextView
         android:id="@+id/TXTV_need_account"
@@ -64,19 +65,20 @@
         android:text="@string/account_needed_q"
         app:layout_constraintBaseline_toBaselineOf="@+id/TXTV_signup"
         app:layout_constraintEnd_toStartOf="@+id/TXTV_signup"
-        app:layout_constraintHorizontal_bias="0.977"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="@+id/ETXT_password" />
 
     <TextView
         android:id="@+id/TXTV_signup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="116dp"
-        android:layout_marginBottom="36dp"
+        android:layout_marginStart="3dp"
+        android:layout_marginTop="46dp"
         android:text="@string/sign_up"
         android:textColor="#E91E63"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="@+id/ETXT_password"
+        app:layout_constraintStart_toEndOf="@+id/TXTV_need_account"
+        app:layout_constraintTop_toBottomOf="@+id/BTN_login" />
 
     <TextView
         android:id="@+id/textView"

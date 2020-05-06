@@ -5,7 +5,6 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.ActionOnlyNavDirections;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 
@@ -19,8 +18,7 @@ import com.apollographql.apollo.ApolloCall;
 import com.apollographql.apollo.ApolloClient;
 import com.apollographql.apollo.api.Response;
 import com.apollographql.apollo.exception.ApolloException;
-import com.snipsnap.android.barbershop.GetBarbersQuery;
-import com.snipsnap.android.barbershop.R;
+import com.snipsnap.android.barbershop.GetAllBarbersQuery;
 import com.snipsnap.android.barbershop.databinding.FragmentMainBinding;
 
 import org.jetbrains.annotations.NotNull;
@@ -58,13 +56,13 @@ public class MainFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        final GetBarbersQuery gbq = GetBarbersQuery.builder().build();
+        final GetAllBarbersQuery gbq = GetAllBarbersQuery.builder().build();
 
         btn_query.setOnClickListener(r -> apolloClient.query(gbq).
-                enqueue(new ApolloCall.Callback<GetBarbersQuery.Data>() {
+                enqueue(new ApolloCall.Callback<GetAllBarbersQuery.Data>() {
             @Override
-            public void onResponse(@NotNull Response<GetBarbersQuery.Data> response) {
-                Log.i(TAG, response.data().toString());
+            public void onResponse(@NotNull Response<GetAllBarbersQuery.Data> response) {
+                Log.i(TAG, response.getData().toString());
             }
 
             @Override

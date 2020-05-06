@@ -1,35 +1,38 @@
-query getBarbers{
-    getAllBarbers {
+query GetAllBarbers{
+    getAllBarbers{
+        barberID
+        firstName
+        lastName
+    }
+}
+
+mutation RefreshToken($input: RefreshTokenInput!) {
+    refreshToken(input: $input) {
+        response
+        error
+    }
+}
+
+mutation LoginBarber($input: UserLogin!) {
+    login(input: $input) {
+        response
+        error
+    }
+}
+
+mutation SignUpBarber($input: NewBarber!) {
+    signUpBarber(input: $input) {
+        error
+        response
+    }
+}
+
+query GetBarberByID($id:ID!) {
+    getBarberByID(id:$id) {
         barberID
         shopID
         userName
         firstName
         lastName
-        PhoneNumber
-        gender
-        dob
-        hireDate
-        dismissDate
-        seatNum
-    }
-}
-
-mutation insertBarber {
-    signUpBarber(
-        input: {
-            shopID: 9
-            userName: "Nandi123"
-            password: "abz4588xyz"
-            firstName: "Nan"
-            lastName: "Do"
-            PhoneNumber: "737-59-3277"
-            gender: "M"
-            dob:"2002-04-02"
-            hireDate: "2018-12-04"
-            dismissDate: null
-            seatNum: 4
-        }
-    ) {
-        error
     }
 }

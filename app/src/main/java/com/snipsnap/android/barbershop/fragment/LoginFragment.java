@@ -13,17 +13,32 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.snipsnap.android.barbershop.R;
+import com.apollographql.apollo.ApolloCall;
+import com.apollographql.apollo.ApolloClient;
+import com.apollographql.apollo.api.Response;
+import com.apollographql.apollo.exception.ApolloException;
+import com.snipsnap.android.barbershop.LoginBarberMutation;
+import com.snipsnap.android.barbershop.MainActivity;
 import com.snipsnap.android.barbershop.databinding.FragmentLoginBinding;
-import com.snipsnap.android.barbershop.databinding.FragmentMainBinding;
+import com.snipsnap.android.barbershop.type.UserLogin;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Objects;
+
+import static androidx.constraintlayout.widget.Constraints.TAG;
+
 public class LoginFragment extends Fragment {
     private FragmentLoginBinding loginBinding;
+    private ApolloClient apolloClient;
     private TextView txtv_signup;
+    private EditText etxt_username;
+    private EditText etxt_password;
+    private Button btn_submit;
 
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater,
@@ -40,16 +55,85 @@ public class LoginFragment extends Fragment {
                               @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         txtv_signup = loginBinding.TXTVSignup;
+        btn_submit = loginBinding.BTNLogin;
+        etxt_username = loginBinding.ETXTUsername;
+        etxt_password = loginBinding.ETXTPassword;
+
+        String myUrl = "http://ec2-18-144-86-87.us-west-1.compute.amazonaws.com:69/query";
+        apolloClient = ApolloClient.builder().serverUrl(myUrl).build();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        txtv_signup.setOnClickListener( s -> {
-            NavDirections toSignup = LoginFragmentDirections
-                    .actionLoginFragmentToSignupFragment();
-            Navigation.findNavController(loginBinding.getRoot())
-                    .navigate(toSignup);
+
+        btn_submit.setOnClickListener(l -> {
+            if (!isInputNull()) {
+                UserLogin userLogin = UserLogin.builder()
+                        .username(etxt_username.getText().toString())
+                        .password(etxt_password.getText().toString())
+                        .build();
+                final LoginBarberMutation login = LoginBarberMutation.builder()
+                        .input(userLogin)
+                        .build();
+                apolloClient.mutate(login)
+                        .enqueue(new ApolloCall.Callback<LoginBarberMutation.Data>() {
+                            @Override
+                            public void onResponse(@NotNull Response<LoginBarberMutation.Data> response) {
+                                if (response.getData()
+                                        .login()
+                                        .error()
+                                        .contains("Authentication error.")) {
+                                    requireActivity().runOnUiThread(() -> {
+                                        Toast toast = Toast.makeText(getContext(),
+                                                "Incorrect username & pw",
+                                                Toast.LENGTH_SHORT);
+                                        toast.show();
+                                    });
+                                } else {
+                                    Log.i(TAG,
+                                            "User found!:" + response.getData()
+                                                    .login()
+                                                    .response());
+                                    // Pass data to the next fragment screen!
+                                    navigateToCalendar();
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(@NotNull ApolloException e) {
+                                Log.e(TAG, e.getMessage(), e);
+                            }
+                        });
+
+            } else {
+                Toast toast = Toast.makeText(getContext(),
+                        "Needs username & pw", Toast.LENGTH_SHORT);
+                toast.show();
+            }
         });
+
+        txtv_signup.setOnClickListener(s -> {
+            navigateToSignup();
+        });
+    }
+
+    private void navigateToSignup() {
+        NavDirections toSignup = LoginFragmentDirections
+                .actionLoginFragmentToSignupFragment();
+        Navigation.findNavController(loginBinding.getRoot())
+                .navigate(toSignup);
+    }
+
+    private void navigateToCalendar() {
+        NavDirections toCalendar = LoginFragmentDirections
+                .actionLoginFragmentToCalendarFragment();
+        Navigation.findNavController(loginBinding.getRoot())
+                .navigate(toCalendar);
+    }
+
+    private boolean isInputNull() {
+        return (etxt_username.getText().toString().isEmpty() ||
+                etxt_password.getText().toString().isEmpty());
     }
 }

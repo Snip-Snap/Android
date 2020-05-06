@@ -41,7 +41,7 @@ repositories {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    implementation("com.apollographql.apollo:apollo-runtime:1.3.3")
+    implementation("com.apollographql.apollo:apollo-runtime:2.0.1")
     compileOnly("org.jetbrains:annotations:13.0")
     testCompileOnly("org.jetbrains:annotations:13.0")
 
