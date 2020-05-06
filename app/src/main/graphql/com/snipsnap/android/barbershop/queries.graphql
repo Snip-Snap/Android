@@ -13,7 +13,7 @@ mutation RefreshToken($input: RefreshTokenInput!) {
     }
 }
 
-mutation LoginBarber($input: Login!) {
+mutation LoginBarber($input: UserLogin!) {
     login(input: $input) {
         response
         error

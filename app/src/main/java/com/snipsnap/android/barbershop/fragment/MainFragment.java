@@ -18,6 +18,7 @@ import com.apollographql.apollo.ApolloCall;
 import com.apollographql.apollo.ApolloClient;
 import com.apollographql.apollo.api.Response;
 import com.apollographql.apollo.exception.ApolloException;
+import com.snipsnap.android.barbershop.GetAllBarbersQuery;
 import com.snipsnap.android.barbershop.databinding.FragmentMainBinding;
 
 import org.jetbrains.annotations.NotNull;
@@ -55,20 +56,20 @@ public class MainFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-//        final GetAllBarbersQuery gbq = GetAllBarbersQuery.builder().build();
-//
-//        btn_query.setOnClickListener(r -> apolloClient.query(gbq).
-//                enqueue(new ApolloCall.Callback<GetAllBarbersQuery.Data>() {
-//            @Override
-//            public void onResponse(@NotNull Response<GetAllBarbersQuery.Data> response) {
-//                Log.i(TAG, response.data().toString());
-//            }
-//
-//            @Override
-//            public void onFailure(@NotNull ApolloException e) {
-//                Log.e(TAG, e.getMessage(), e);
-//            }
-//        }));
+        final GetAllBarbersQuery gbq = GetAllBarbersQuery.builder().build();
+
+        btn_query.setOnClickListener(r -> apolloClient.query(gbq).
+                enqueue(new ApolloCall.Callback<GetAllBarbersQuery.Data>() {
+            @Override
+            public void onResponse(@NotNull Response<GetAllBarbersQuery.Data> response) {
+                Log.i(TAG, response.getData().toString());
+            }
+
+            @Override
+            public void onFailure(@NotNull ApolloException e) {
+                Log.e(TAG, e.getMessage(), e);
+            }
+        }));
 
         btn_login.setOnClickListener(l -> {
             NavDirections toLogin = MainFragmentDirections

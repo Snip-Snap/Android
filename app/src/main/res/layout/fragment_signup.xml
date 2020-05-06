@@ -43,7 +43,7 @@
             app:layout_constraintTop_toBottomOf="@+id/TXTV_register" />
 
         <EditText
-            android:id="@+id/TXT_username"
+            android:id="@+id/ETXT_username"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
@@ -83,7 +83,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <EditText
-            android:id="@+id/TXT_password"
+            android:id="@+id/ETXT_password"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
@@ -94,7 +94,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/TXT_username" />
+            app:layout_constraintTop_toBottomOf="@+id/ETXT_username" />
 
         <EditText
             android:id="@+id/TXT_firstname"
@@ -108,7 +108,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/TXT_password" />
+            app:layout_constraintTop_toBottomOf="@+id/ETXT_password" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>
