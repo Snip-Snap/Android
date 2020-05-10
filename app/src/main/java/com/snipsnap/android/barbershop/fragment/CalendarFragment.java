@@ -1,6 +1,5 @@
 package com.snipsnap.android.barbershop.fragment;
 
-import android.icu.util.Calendar;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -40,7 +39,7 @@ public class CalendarFragment extends Fragment {
         txtv_barberName = calendarBinding.TXTVBarber;
         // This is how setText will be dynamic for each barber.
         // String array corresponding with barberID
-        String bn = "dynamic text2?";
+        String bn = CalendarFragmentArgs.fromBundle(getArguments()).getToken();
         txtv_barberName.setText(bn);
     }
 

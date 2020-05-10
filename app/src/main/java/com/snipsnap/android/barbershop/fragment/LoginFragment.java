@@ -22,13 +22,10 @@ import com.apollographql.apollo.ApolloClient;
 import com.apollographql.apollo.api.Response;
 import com.apollographql.apollo.exception.ApolloException;
 import com.snipsnap.android.barbershop.LoginBarberMutation;
-import com.snipsnap.android.barbershop.MainActivity;
 import com.snipsnap.android.barbershop.databinding.FragmentLoginBinding;
 import com.snipsnap.android.barbershop.type.UserLogin;
 
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Objects;
 
 import static androidx.constraintlayout.widget.Constraints.TAG;
 
@@ -95,8 +92,11 @@ public class LoginFragment extends Fragment {
                                             "User found!:" + response.getData()
                                                     .login()
                                                     .response());
+                                    String token = response.getData()
+                                            .login()
+                                            .response();
                                     // Pass data to the next fragment screen!
-                                    navigateToCalendar();
+                                    navigateToCalendar(token);
                                 }
                             }
 
@@ -125,9 +125,9 @@ public class LoginFragment extends Fragment {
                 .navigate(toSignup);
     }
 
-    private void navigateToCalendar() {
+    private void navigateToCalendar(String tkn) {
         NavDirections toCalendar = LoginFragmentDirections
-                .actionLoginFragmentToCalendarFragment();
+                .actionLoginFragmentToCalendarFragment(tkn);
         Navigation.findNavController(loginBinding.getRoot())
                 .navigate(toCalendar);
     }

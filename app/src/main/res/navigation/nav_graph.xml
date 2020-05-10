@@ -37,5 +37,9 @@
         android:id="@+id/calendarFragment"
         android:name="com.snipsnap.android.barbershop.fragment.CalendarFragment"
         android:label="fragment_calendar"
-        tools:layout="@layout/fragment_calendar" />
+        tools:layout="@layout/fragment_calendar" >
+        <argument
+            android:name="token"
+            app:argType="string" />
+    </fragment>
 </navigation>
