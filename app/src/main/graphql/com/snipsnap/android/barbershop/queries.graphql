@@ -36,3 +36,34 @@ query GetBarberByID($id:ID!) {
         lastName
     }
 }
+
+query getApptByUsername($username: String!) {
+    getAppointmentsByUsername(username: $username) {
+        barber {
+            firstName
+            lastName
+        }
+        shop {
+            shopName
+            streetAddr
+        }
+        appointment {
+            apptDate
+            startTime
+            endTime
+            paymentType
+            clientCancelled
+            barberCancelled
+        }
+        client {
+            firstName
+            lastName
+        }
+        service{
+            serviceName
+            serviceDescription
+            price
+            duration
+        }
+    }
+}

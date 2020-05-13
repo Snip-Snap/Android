@@ -27,9 +27,9 @@ import com.snipsnap.android.barbershop.type.UserLogin;
 
 import org.jetbrains.annotations.NotNull;
 
-import static androidx.constraintlayout.widget.Constraints.TAG;
 
 public class LoginFragment extends Fragment {
+    final private String TAG = "barbershop: LoginF";
     private FragmentLoginBinding loginBinding;
     private ApolloClient apolloClient;
     private TextView txtv_signup;
@@ -66,18 +66,24 @@ public class LoginFragment extends Fragment {
 
         btn_submit.setOnClickListener(l -> {
             if (!isInputNull()) {
+                String username = etxt_username.getText().toString();
+                String password = etxt_password.getText().toString();
+                // Building input for Login mutation.
                 UserLogin userLogin = UserLogin.builder()
-                        .username(etxt_username.getText().toString())
-                        .password(etxt_password.getText().toString())
+                        .username(username)
+                        .password(password)
                         .build();
+                // Building Login mutation.
                 final LoginBarberMutation login = LoginBarberMutation.builder()
                         .input(userLogin)
                         .build();
                 apolloClient.mutate(login)
                         .enqueue(new ApolloCall.Callback<LoginBarberMutation.Data>() {
                             @Override
-                            public void onResponse(@NotNull Response<LoginBarberMutation.Data> response) {
-                                if (response.getData()
+                            public void onResponse(@NotNull Response<LoginBarberMutation.Data> r) {
+                                // r.getData().login() is the field of
+                                // the LoginBarber mutation.
+                                if (r.getData()
                                         .login()
                                         .error()
                                         .contains("Authentication error.")) {
@@ -89,14 +95,15 @@ public class LoginFragment extends Fragment {
                                     });
                                 } else {
                                     Log.i(TAG,
-                                            "User found!:" + response.getData()
+                                            "User found!:" + r.getData()
                                                     .login()
                                                     .response());
-                                    String token = response.getData()
+                                    String token = r.getData()
                                             .login()
                                             .response();
+//                                    String token = "Fernando Herrera";
                                     // Pass data to the next fragment screen!
-                                    navigateToCalendar(token);
+                                    navigateToCalendar(token, username);
                                 }
                             }
 
@@ -118,6 +125,12 @@ public class LoginFragment extends Fragment {
         });
     }
 
+    @Override
+    public void onDestroyView() {
+        loginBinding = null;
+        super.onDestroyView();
+    }
+
     private void navigateToSignup() {
         NavDirections toSignup = LoginFragmentDirections
                 .actionLoginFragmentToSignupFragment();
@@ -125,9 +138,9 @@ public class LoginFragment extends Fragment {
                 .navigate(toSignup);
     }
 
-    private void navigateToCalendar(String tkn) {
+    private void navigateToCalendar(String tkn, String usrname) {
         NavDirections toCalendar = LoginFragmentDirections
-                .actionLoginFragmentToCalendarFragment(tkn);
+                .actionLoginFragmentToCalendarFragment(tkn, usrname);
         Navigation.findNavController(loginBinding.getRoot())
                 .navigate(toCalendar);
     }

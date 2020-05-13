@@ -61,8 +61,8 @@ public class MainFragment extends Fragment {
         btn_query.setOnClickListener(r -> apolloClient.query(gbq).
                 enqueue(new ApolloCall.Callback<GetAllBarbersQuery.Data>() {
             @Override
-            public void onResponse(@NotNull Response<GetAllBarbersQuery.Data> response) {
-                Log.i(TAG, response.getData().toString());
+            public void onResponse(@NotNull Response<GetAllBarbersQuery.Data> r) {
+                Log.i(TAG, r.getData().toString());
             }
 
             @Override
@@ -77,5 +77,11 @@ public class MainFragment extends Fragment {
             Navigation.findNavController(mainBinding
                     .getRoot()).navigate(toLogin);
         });
+    }
+
+    @Override
+    public void onDestroyView() {
+        mainBinding = null;
+        super.onDestroyView();
     }
 }
