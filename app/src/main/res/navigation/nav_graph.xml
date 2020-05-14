@@ -41,8 +41,5 @@
         <argument
             android:name="token"
             app:argType="string" />
-        <argument
-            android:name="username"
-            app:argType="string" />
     </fragment>
 </navigation>

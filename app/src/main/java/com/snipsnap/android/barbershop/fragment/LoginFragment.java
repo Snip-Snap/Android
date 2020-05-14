@@ -5,6 +5,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 
@@ -23,19 +24,29 @@ import com.apollographql.apollo.api.Response;
 import com.apollographql.apollo.exception.ApolloException;
 import com.snipsnap.android.barbershop.LoginBarberMutation;
 import com.snipsnap.android.barbershop.databinding.FragmentLoginBinding;
+import com.snipsnap.android.barbershop.helpers.BarberViewModel;
 import com.snipsnap.android.barbershop.type.UserLogin;
 
 import org.jetbrains.annotations.NotNull;
 
 
 public class LoginFragment extends Fragment {
-    final private String TAG = "barbershop: LoginF";
     private FragmentLoginBinding loginBinding;
     private ApolloClient apolloClient;
+    private BarberViewModel mBarberViewModel;
+
     private TextView txtv_signup;
     private EditText etxt_username;
     private EditText etxt_password;
     private Button btn_submit;
+    final private String TAG = "barbershop: LoginF";
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mBarberViewModel = new ViewModelProvider(requireActivity())
+                .get(BarberViewModel.class);
+    }
 
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater,
@@ -101,9 +112,9 @@ public class LoginFragment extends Fragment {
                                     String token = r.getData()
                                             .login()
                                             .response();
-//                                    String token = "Fernando Herrera";
+                                    mBarberViewModel.setBarberUsername(username);
                                     // Pass data to the next fragment screen!
-                                    navigateToCalendar(token, username);
+                                    navigateToCalendar(token);
                                 }
                             }
 
@@ -138,9 +149,9 @@ public class LoginFragment extends Fragment {
                 .navigate(toSignup);
     }
 
-    private void navigateToCalendar(String tkn, String usrname) {
+    private void navigateToCalendar(String tkn) {
         NavDirections toCalendar = LoginFragmentDirections
-                .actionLoginFragmentToCalendarFragment(tkn, usrname);
+                .actionLoginFragmentToCalendarFragment(tkn);
         Navigation.findNavController(loginBinding.getRoot())
                 .navigate(toCalendar);
     }

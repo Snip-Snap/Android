@@ -5,9 +5,9 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +17,7 @@ import android.widget.Toast;
 
 import com.snipsnap.android.barbershop.databinding.FragmentCalendarBinding;
 import com.snipsnap.android.barbershop.helpers.AppointmentModel;
-import com.snipsnap.android.barbershop.helpers.CalendarViewModel;
+import com.snipsnap.android.barbershop.helpers.BarberViewModel;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -26,10 +26,9 @@ import java.util.List;
 public class CalendarFragment extends Fragment {
     private FragmentCalendarBinding calendarBinding;
     private CalendarView mCalendar;
-    private CalendarViewModel mCalendarViewModel;
+    private BarberViewModel mBarberViewModel;
 
     private TextView mTxtv_barberName;
-    private String mBarberUsername;
     private List<AppointmentModel> apptModel;
     final private String TAG = "barbershop: calV";
 
@@ -37,7 +36,9 @@ public class CalendarFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mCalendarViewModel = new ViewModelProvider(requireActivity()).get(CalendarViewModel.class);
+        mBarberViewModel = new ViewModelProvider(requireActivity())
+                .get(BarberViewModel.class);
+        mBarberViewModel.loadBarberAppointments();
     }
 
     @Override
@@ -55,9 +56,14 @@ public class CalendarFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         mCalendar = calendarBinding.calendarView;
         mTxtv_barberName = calendarBinding.TXTVBarber;
-        mBarberUsername = CalendarFragmentArgs.fromBundle(getArguments()).getUsername();
-        mTxtv_barberName.setText(mBarberUsername);
-        getAppointments();
+
+        mBarberViewModel.getAppointments().observe(getViewLifecycleOwner(),am -> {
+            String barberGreeting;
+            barberGreeting = "Welcome back ";
+            barberGreeting = barberGreeting.concat(am.get(0).bFirstName);
+            barberGreeting = barberGreeting.concat(" " + am.get(0).bLastName + "!");
+            mTxtv_barberName.setText(barberGreeting);
+        });
     }
 
     @Override
@@ -70,6 +76,7 @@ public class CalendarFragment extends Fragment {
             toast.show();
             // Since I have one big call to get all appointments for a barber
             // I should have a control structure to handle the appointment dates.
+            // Ex: if apptDate == year + month + day, then use that object.
         });
     }
 
@@ -77,14 +84,5 @@ public class CalendarFragment extends Fragment {
     public void onDestroyView() {
         calendarBinding = null;
         super.onDestroyView();
-    }
-
-    private void getAppointments() {
-        mCalendarViewModel.setBarberUsername(mBarberUsername);
-       apptModel = mCalendarViewModel.getAppointments();
-//        mCalendarViewModel.getAppointments().observe(getViewLifecycleOwner(), item -> {
-//            Log.i(TAG, item.toString());
-//        }   );
-       Log.i(TAG,apptModel.toString());
     }
 }

@@ -1,9 +1,7 @@
 package com.snipsnap.android.barbershop.helpers;
 
-import android.os.Build;
 import android.util.Log;
 
-import androidx.annotation.RequiresApi;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -18,43 +16,37 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
 
 
-public class CalendarViewModel extends ViewModel {
-    // Look into integrating live data to future version of ViewModel.
-    // Also, look into adding a repository component 'beneath' ViewMode/LiveData.
+public class BarberViewModel extends ViewModel {
+    // Look into adding a repository component 'beneath' ViewMode/LiveData.
     // The repository would handle the data fetching, not the VM which does now.
 
     final private String TAG = "barbershop: CVM";
     final private String myUrl = "http://ec2-18-144-86-87.us-west-1.compute.amazonaws.com:69/query";
     final private ApolloClient mApolloClient = ApolloClient.builder().serverUrl(myUrl).build();
+
     private MutableLiveData<String> mBarberUsername = new MutableLiveData<>();
-    private List<AppointmentModel> mApptList;
-//    private MutableLiveData<List<AppointmentModel>> amld = new MutableLiveData<>();
-//    private CompletableFuture<List<AppointmentModel>> mApptList;
+    private MutableLiveData<List<AppointmentModel>> mAppointments = new MutableLiveData<>();
 
-    public List<AppointmentModel> getAppointments() {
-        loadBarberAppointments();
-//        CompletableFuture.anyOf(mApptList).thenAccept(r -> {
-//        })
-//        .exceptionally(throwable -> {
-//            Log.e(TAG, "Exception loading", throwable);
-//            return null;
-//        });
-        return mApptList;
+    public LiveData<List<AppointmentModel>> getAppointments() {
+        return mAppointments;
     }
 
-    public void setBarberUsername(String bn) {
-        mBarberUsername.setValue(bn);
+    public void setBarberUsername(String barberName) {
+        // postValue because method called within a background thread.
+        mBarberUsername.postValue(barberName);
     }
 
-    public LiveData<String> getBarberUsername() {
-        return mBarberUsername;
+    public void loadBarberAppointments() {
+        fetchAppointments();
     }
 
-    private void loadBarberAppointments() {
-//        mApolloClient = ApolloClient.builder().serverUrl(myUrl).build();
+    private void fetchAppointments() {
+        if (mBarberUsername.getValue().isEmpty()) {
+            Log.d(TAG, "mBarberName is empty.");
+            return;
+        }
         final GetApptByUsernameQuery getappt = GetApptByUsernameQuery.builder()
                 .username(mBarberUsername.getValue())
                 .build();
@@ -62,7 +54,11 @@ public class CalendarViewModel extends ViewModel {
                 .enqueue(new ApolloCall.Callback<GetApptByUsernameQuery.Data>() {
                     @Override
                     public void onResponse(@NotNull Response<GetApptByUsernameQuery.Data> r) {
-                        mApptList = new ArrayList<>();
+                        if (r.getData().getAppointmentsByUsername().isEmpty()) {
+                            Log.d(TAG, "Query list is empty.");
+                            return;
+                        }
+                        List<AppointmentModel> apptList = new ArrayList<>();
                         for (GetApptByUsernameQuery.GetAppointmentsByUsername data : r.getData().getAppointmentsByUsername()) {
                             AppointmentModel am = new AppointmentModel();
                             am.bFirstName = data.barber().firstName();
@@ -81,9 +77,10 @@ public class CalendarViewModel extends ViewModel {
                             am.serviceDesc = data.service().serviceDescription();
                             am.price = data.service().price();
                             am.serviceDuration = data.service().duration();
-                            mApptList.add(am);
-                            Log.i(TAG, mApptList.toString());
+                            apptList.add(am);
                         }
+                        // This HAS to be like this.
+                        mAppointments.postValue(apptList);
                     }
 
                     @Override
@@ -91,7 +88,5 @@ public class CalendarViewModel extends ViewModel {
                         Log.i(TAG, e.toString());
                     }
                 });
-//        amld.setValue(mApptList);
     }
-
 }
