@@ -17,6 +17,7 @@ import java.util.List;
 // and onCreateViewHolder.
 public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.MyViewHolder> {
     private List<AppointmentModel> mAppointmentList;
+    private AppointmentModel appointmentModel;
 
     public CalendarAdapter(List<AppointmentModel> apptList) {
         mAppointmentList = apptList;
@@ -36,7 +37,6 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.MyView
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        // Does this inflate?
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.card_appointment,parent, false);
         MyViewHolder viewHolder = new MyViewHolder(view);

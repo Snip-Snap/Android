@@ -1,5 +1,7 @@
 package com.snipsnap.android.barbershop.helpers;
 
+import android.icu.text.SimpleDateFormat;
+import android.net.ParseException;
 import android.util.Log;
 
 import androidx.lifecycle.LiveData;
@@ -15,6 +17,7 @@ import com.snipsnap.android.barbershop.GetApptByUsernameQuery;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
@@ -27,29 +30,46 @@ public class BarberViewModel extends ViewModel {
     final private ApolloClient mApolloClient = ApolloClient.builder().serverUrl(myUrl).build();
 
     private MutableLiveData<String> mBarberUsername = new MutableLiveData<>();
-    private MutableLiveData<List<AppointmentModel>> mAppointments = new MutableLiveData<>();
+    private MutableLiveData<List<AppointmentModel>> mMasterAppointments = new MutableLiveData<>();
 
     public LiveData<List<AppointmentModel>> getAllAppointments() {
-        return mAppointments;
+        return mMasterAppointments;
     }
 
-    public AppointmentModel getAppointmentByDate(String date) {
-        if (mAppointments.getValue().isEmpty()) {
+    public LiveData<List<AppointmentModel>> getAppointmentByDate(String date) {
+        MutableLiveData<List<AppointmentModel>> mTmpAppointments = new MutableLiveData<>();
+        if (mMasterAppointments == null) {
             Log.d(TAG, "getAppointmentsByDate's mAppointments is empty");
-            return null;
+            return mTmpAppointments;
         }
-        for (AppointmentModel am : mAppointments.getValue()) {
-            if (am.apptDate.equals(date)) {
-                return am;
+        List<AppointmentModel> tmpList = new ArrayList<>();
+        mTmpAppointments.setValue(mMasterAppointments.getValue());
+        for (AppointmentModel apptModel : mTmpAppointments.getValue()) {
+            date = parseDate(date);
+            String dt = apptModel.apptDate;
+            dt = parseDate(dt);
+            if (date.equals(dt)) {
+                tmpList.add(apptModel);
             }
         }
-        Log.d(TAG, "Date not found in mAppointments");
-        return null;
+        mTmpAppointments.setValue(tmpList);
+        return mTmpAppointments;
     }
 
     public void setBarberUsername(String barberName) {
         // postValue because method called within a background thread.
         mBarberUsername.postValue(barberName);
+    }
+
+    private String parseDate(String dt) {
+        SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            Date d = fmt.parse(dt);
+            return fmt.format(d);
+        }
+        catch(ParseException | java.text.ParseException pe) {
+            return "Date";
+        }
     }
 
     public void loadBarberAppointments() {
@@ -93,8 +113,9 @@ public class BarberViewModel extends ViewModel {
                             am.serviceDuration = data.service().duration();
                             apptList.add(am);
                         }
-                        // This HAS to be like this.
-                        mAppointments.postValue(apptList);
+                        // This HAS to be in here.
+                        // add the new here for mMasterAppointments?
+                        mMasterAppointments.postValue(apptList);
                     }
 
                     @Override

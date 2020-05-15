@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -67,34 +68,29 @@ public class CalendarFragment extends Fragment {
         // Can layout manager and adapter be called in onCreatew?
         mLayoutManager = new LinearLayoutManager(requireActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
-//        mAdapter = new CalendarAdapter(mBarberViewModel.getAppointments().getValue());
-        mBarberViewModel.getAllAppointments().observe(getViewLifecycleOwner(), am -> {
-            mAdapter = new CalendarAdapter(am);
-            mRecyclerView.setAdapter(mAdapter);
-        });
-//        mRecyclerView.setAdapter(mAdapter);
 
 
-        mBarberViewModel.getAllAppointments().observe(getViewLifecycleOwner(), am -> {
-            String barberGreeting;
-            barberGreeting = "Welcome back ";
-            barberGreeting = barberGreeting.concat(am.get(0).bFirstName);
-            barberGreeting = barberGreeting.concat(" " + am.get(0).bLastName + "!");
-            mTxtv_barberName.setText(barberGreeting);
-        });
+//        mBarberViewModel.getAllAppointments().observe(getViewLifecycleOwner(), am -> {
+//            String barberGreeting;
+//            barberGreeting = "Welcome back ";
+//            barberGreeting = barberGreeting.concat(am.get(0).bFirstName);
+//            barberGreeting = barberGreeting.concat(" " + am.get(0).bLastName + "!");
+//            mTxtv_barberName.setText(barberGreeting);
+//        });
     }
 
     @Override
     public void onResume() {
         super.onResume();
         mCalendar.setOnDateChangeListener((cv, year, month, day) -> {
-            String date = year+"-"+month+"-"+day;
+            month = month + 1;
+            String date = year + "-" + month + "-" + day;
             Toast toast = Toast.makeText(getContext(), date, Toast.LENGTH_SHORT);
             toast.show();
-            mBarberViewModel.getAppointmentByDate(date);
-            // Since I have one big call to get all appointments for a barber
-            // I should have a control structure to handle the appointment dates.
-            // Ex: if apptDate == year + month + day, then use that object.
+            mBarberViewModel.getAppointmentByDate(date).observe(getViewLifecycleOwner(), am -> {
+                mAdapter = new CalendarAdapter(am);
+                mRecyclerView.setAdapter(mAdapter);
+            });
         });
     }
 
