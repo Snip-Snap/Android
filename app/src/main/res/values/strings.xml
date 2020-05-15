@@ -12,6 +12,6 @@
     <string name="last_name">Last Name</string>
     <string name="register">Register</string>
     <string name="login">Login</string>
-    <string name="barber_name">Barber Name</string>
+    <string name="barber_name">Huaqing Wang</string>
     <string name="client_name">Client Name</string>
 </resources>

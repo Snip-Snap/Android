@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView
     xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/MCV_appointmentCards"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="5dp"
@@ -8,10 +9,17 @@
     android:layout_marginRight="5dp"
     android:elevation="5dp"
     >
-    <TextView
-        android:id="@+id/TXTV_client_name"
+    <LinearLayout
+        android:id="@+id/LL_cards"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/client_name"/>
+        android:orientation="horizontal"
+        android:background="@android:color/white">
+        <TextView
+            android:id="@+id/TXTV_client_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/client_name"/>
+    </LinearLayout>
 
 </com.google.android.material.card.MaterialCardView>

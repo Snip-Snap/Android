@@ -59,6 +59,7 @@ dependencies {
     compileOnly("org.jetbrains:annotations:13.0")
     testCompileOnly("org.jetbrains:annotations:13.0")
 
+    // Material Design Components
     implementation 'com.google.android.material:material:1.1.0'
 
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'

@@ -29,8 +29,22 @@ public class BarberViewModel extends ViewModel {
     private MutableLiveData<String> mBarberUsername = new MutableLiveData<>();
     private MutableLiveData<List<AppointmentModel>> mAppointments = new MutableLiveData<>();
 
-    public LiveData<List<AppointmentModel>> getAppointments() {
+    public LiveData<List<AppointmentModel>> getAllAppointments() {
         return mAppointments;
+    }
+
+    public AppointmentModel getAppointmentByDate(String date) {
+        if (mAppointments.getValue().isEmpty()) {
+            Log.d(TAG, "getAppointmentsByDate's mAppointments is empty");
+            return null;
+        }
+        for (AppointmentModel am : mAppointments.getValue()) {
+            if (am.apptDate.equals(date)) {
+                return am;
+            }
+        }
+        Log.d(TAG, "Date not found in mAppointments");
+        return null;
     }
 
     public void setBarberUsername(String barberName) {
