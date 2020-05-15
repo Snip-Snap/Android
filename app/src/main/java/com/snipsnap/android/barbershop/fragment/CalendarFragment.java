@@ -69,7 +69,6 @@ public class CalendarFragment extends Fragment {
         mLayoutManager = new LinearLayoutManager(requireActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-
 //        mBarberViewModel.getAllAppointments().observe(getViewLifecycleOwner(), am -> {
 //            String barberGreeting;
 //            barberGreeting = "Welcome back ";
@@ -77,6 +76,17 @@ public class CalendarFragment extends Fragment {
 //            barberGreeting = barberGreeting.concat(" " + am.get(0).bLastName + "!");
 //            mTxtv_barberName.setText(barberGreeting);
 //        });
+        mBarberViewModel.getAllAppointments().observe(getViewLifecycleOwner(), am -> {
+            if (am.isEmpty()) {
+                Log.d(TAG, "No barber.");
+                return;
+            }
+            String barberGreeting;
+            barberGreeting = "Welcome back ";
+            barberGreeting = barberGreeting.concat(am.get(0).bFirstName);
+            barberGreeting = barberGreeting.concat(" " + am.get(0).bLastName + "!");
+            mTxtv_barberName.setText(barberGreeting);
+        });
     }
 
     @Override
@@ -88,6 +98,10 @@ public class CalendarFragment extends Fragment {
             Toast toast = Toast.makeText(getContext(), date, Toast.LENGTH_SHORT);
             toast.show();
             mBarberViewModel.getAppointmentByDate(date).observe(getViewLifecycleOwner(), am -> {
+//                if (am.isEmpty()) {
+//                    Log.d(TAG, "No appointments.");
+//                    return;
+//                }
                 mAdapter = new CalendarAdapter(am);
                 mRecyclerView.setAdapter(mAdapter);
             });

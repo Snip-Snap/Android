@@ -30,16 +30,25 @@ public class BarberViewModel extends ViewModel {
     final private ApolloClient mApolloClient = ApolloClient.builder().serverUrl(myUrl).build();
 
     private MutableLiveData<String> mBarberUsername = new MutableLiveData<>();
+    private MutableLiveData<String> mBarberFullName = new MutableLiveData<>();
     private MutableLiveData<List<AppointmentModel>> mMasterAppointments = new MutableLiveData<>();
 
     public LiveData<List<AppointmentModel>> getAllAppointments() {
         return mMasterAppointments;
     }
 
+    public LiveData<String> getBarberFullName() {
+        // Throws null pointer exception!
+        String fullName = mMasterAppointments.getValue().get(0).bFirstName;
+        fullName = fullName.concat(" " +mMasterAppointments.getValue().get(0).bLastName);
+        mBarberFullName.setValue(fullName);
+        return mBarberFullName;
+    }
+
     public LiveData<List<AppointmentModel>> getAppointmentByDate(String date) {
         MutableLiveData<List<AppointmentModel>> mTmpAppointments = new MutableLiveData<>();
-        if (mMasterAppointments == null) {
-            Log.d(TAG, "getAppointmentsByDate's mAppointments is empty");
+        if (mMasterAppointments.getValue().isEmpty()) {
+            Log.d(TAG, "mAppointments is empty");
             return mTmpAppointments;
         }
         List<AppointmentModel> tmpList = new ArrayList<>();
@@ -88,11 +97,12 @@ public class BarberViewModel extends ViewModel {
                 .enqueue(new ApolloCall.Callback<GetApptByUsernameQuery.Data>() {
                     @Override
                     public void onResponse(@NotNull Response<GetApptByUsernameQuery.Data> r) {
+                        List<AppointmentModel> apptList = new ArrayList<>();
                         if (r.getData().getAppointmentsByUsername().isEmpty()) {
+                            mMasterAppointments.postValue(apptList);
                             Log.d(TAG, "Query list is empty.");
                             return;
                         }
-                        List<AppointmentModel> apptList = new ArrayList<>();
                         for (GetApptByUsernameQuery.GetAppointmentsByUsername data : r.getData().getAppointmentsByUsername()) {
                             AppointmentModel am = new AppointmentModel();
                             am.bFirstName = data.barber().firstName();
