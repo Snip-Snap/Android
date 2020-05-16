@@ -15,16 +15,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CalendarView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.snipsnap.android.barbershop.databinding.FragmentCalendarBinding;
-import com.snipsnap.android.barbershop.helpers.AppointmentModel;
 import com.snipsnap.android.barbershop.helpers.BarberViewModel;
 import com.snipsnap.android.barbershop.helpers.CalendarAdapter;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
 
 public class CalendarFragment extends Fragment {
     private FragmentCalendarBinding mCalendarBinding;
@@ -35,7 +32,6 @@ public class CalendarFragment extends Fragment {
     private RecyclerView.LayoutManager mLayoutManager;
 
     private TextView mTxtv_barberName;
-    private List<AppointmentModel> apptModel;
     final private String TAG = "barbershop: calV";
 
 
@@ -69,13 +65,6 @@ public class CalendarFragment extends Fragment {
         mLayoutManager = new LinearLayoutManager(requireActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-//        mBarberViewModel.getAllAppointments().observe(getViewLifecycleOwner(), am -> {
-//            String barberGreeting;
-//            barberGreeting = "Welcome back ";
-//            barberGreeting = barberGreeting.concat(am.get(0).bFirstName);
-//            barberGreeting = barberGreeting.concat(" " + am.get(0).bLastName + "!");
-//            mTxtv_barberName.setText(barberGreeting);
-//        });
         mBarberViewModel.getAllAppointments().observe(getViewLifecycleOwner(), am -> {
             if (am.isEmpty()) {
                 Log.d(TAG, "No barber.");
@@ -97,10 +86,6 @@ public class CalendarFragment extends Fragment {
 //            Toast toast = Toast.makeText(getContext(), date, Toast.LENGTH_SHORT);
 //            toast.show();
             mBarberViewModel.getAppointmentByDate(date).observe(getViewLifecycleOwner(), am -> {
-//                if (am.isEmpty()) {
-//                    Log.d(TAG, "No appointments.");
-//                    return;
-//                }
                 mAdapter = new CalendarAdapter(am);
                 mRecyclerView.setAdapter(mAdapter);
             });
