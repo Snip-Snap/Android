@@ -126,7 +126,7 @@ public class LoginFragment extends Fragment {
 
             } else {
                 Toast toast = Toast.makeText(getContext(),
-                        "Needs username & pw", Toast.LENGTH_SHORT);
+                        "Needs username & password", Toast.LENGTH_SHORT);
                 toast.show();
             }
         });

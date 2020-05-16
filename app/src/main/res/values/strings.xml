@@ -14,4 +14,7 @@
     <string name="login">Login</string>
     <string name="barber_name">Huaqing Wang</string>
     <string name="client_name">Client Name</string>
+    <string name="appt_start_time">Start Time</string>
+    <string name="service">Service</string>
+    <string name="service_icon">Service Icon</string>
 </resources>

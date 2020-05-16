@@ -82,9 +82,8 @@ public class CalendarFragment extends Fragment {
                 return;
             }
             String barberGreeting;
-            barberGreeting = "Welcome back ";
-            barberGreeting = barberGreeting.concat(am.get(0).bFirstName);
-            barberGreeting = barberGreeting.concat(" " + am.get(0).bLastName + "!");
+            barberGreeting = am.get(0).bFirstName;
+            barberGreeting = barberGreeting.concat(" " + am.get(0).bLastName);
             mTxtv_barberName.setText(barberGreeting);
         });
     }
@@ -95,8 +94,8 @@ public class CalendarFragment extends Fragment {
         mCalendar.setOnDateChangeListener((cv, year, month, day) -> {
             month = month + 1;
             String date = year + "-" + month + "-" + day;
-            Toast toast = Toast.makeText(getContext(), date, Toast.LENGTH_SHORT);
-            toast.show();
+//            Toast toast = Toast.makeText(getContext(), date, Toast.LENGTH_SHORT);
+//            toast.show();
             mBarberViewModel.getAppointmentByDate(date).observe(getViewLifecycleOwner(), am -> {
 //                if (am.isEmpty()) {
 //                    Log.d(TAG, "No appointments.");

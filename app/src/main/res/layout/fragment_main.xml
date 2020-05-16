@@ -33,22 +33,12 @@
         app:layout_constraintTop_toBottomOf="@+id/landing_page_greeting" />
 
     <Button
-        android:id="@+id/btn_queryBarbers"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:text="@string/query_barbers"
-        app:layout_constraintEnd_toEndOf="@+id/IMGV_snipsnap_home"
-        app:layout_constraintStart_toStartOf="@+id/IMGV_snipsnap_home"
-        app:layout_constraintTop_toBottomOf="@+id/IMGV_snipsnap_home" />
-
-    <Button
         android:id="@+id/BTN_login"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="53dp"
         android:text="@string/login"
-        app:layout_constraintEnd_toEndOf="@+id/btn_queryBarbers"
-        app:layout_constraintStart_toStartOf="@+id/btn_queryBarbers"
-        app:layout_constraintTop_toBottomOf="@+id/btn_queryBarbers" />
+        app:layout_constraintEnd_toEndOf="@+id/IMGV_snipsnap_home"
+        app:layout_constraintStart_toStartOf="@+id/IMGV_snipsnap_home"
+        app:layout_constraintTop_toBottomOf="@+id/IMGV_snipsnap_home" />
 </androidx.constraintlayout.widget.ConstraintLayout>
