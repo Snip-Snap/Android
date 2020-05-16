@@ -1,25 +1,90 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/MCV_appointmentCards"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginLeft="20dp"
     android:layout_marginTop="5dp"
-    android:layout_marginLeft="5dp"
-    android:layout_marginRight="5dp"
-    android:elevation="5dp"
-    >
-    <LinearLayout
+    android:layout_marginRight="20dp"
+    android:layout_marginBottom="10dp"
+    app:cardElevation="5dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/LL_cards"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:background="@android:color/white">
+        android:layout_width="match_parent"
+        android:layout_height="64dp">
+
+        <View
+            android:id="@+id/vert_line"
+            android:layout_width="7dp"
+            android:layout_height="64dp"
+            android:layout_marginEnd="364dp"
+            android:background="#448AFF"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/IMGV_service_icon"
+            android:layout_width="54dp"
+            android:layout_height="50dp"
+            android:contentDescription="@string/service_icon"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/vert_line2"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/vert_line"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/haircut_icon_512px" />
+
+        <View
+            android:id="@+id/vert_line2"
+            android:layout_width="2dp"
+            android:layout_height="45dp"
+            android:layout_marginStart="85dp"
+            android:layout_marginEnd="284dp"
+            android:background="#FF3D00"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <TextView
             android:id="@+id/TXTV_client_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/client_name"/>
-    </LinearLayout>
+            android:layout_marginTop="3dp"
+            android:text="@string/client_name"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/vert_line2"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/TXTV_appt_start_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:text="@string/appt_start_time"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/vert_line2"
+            app:layout_constraintTop_toBottomOf="@+id/TXTV_client_name" />
+
+        <TextView
+            android:id="@+id/TXTV_service_done"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/service"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/vert_line2" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </com.google.android.material.card.MaterialCardView>

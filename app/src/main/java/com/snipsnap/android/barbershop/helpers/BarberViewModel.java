@@ -101,6 +101,7 @@ public class BarberViewModel extends ViewModel {
                         if (r.getData().getAppointmentsByUsername().isEmpty()) {
                             mMasterAppointments.postValue(apptList);
                             Log.d(TAG, "Query list is empty.");
+                            // Return empty list
                             return;
                         }
                         for (GetApptByUsernameQuery.GetAppointmentsByUsername data : r.getData().getAppointmentsByUsername()) {
