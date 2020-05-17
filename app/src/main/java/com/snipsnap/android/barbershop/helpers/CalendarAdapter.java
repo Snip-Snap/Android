@@ -1,5 +1,7 @@
 package com.snipsnap.android.barbershop.helpers;
 
+import android.icu.text.SimpleDateFormat;
+import android.net.ParseException;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.snipsnap.android.barbershop.R;
 import com.snipsnap.android.barbershop.databinding.CardAppointmentBinding;
 
+import java.util.Date;
 import java.util.List;
 
 // CalendarAdapter.MyViewHolder necessitates nested class of MyViewHolder
@@ -46,8 +49,15 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.MyView
                 break;
             case "shave":
                 holder.imgv_serviceIcon.setImageResource(R.drawable.shave_icon_512px);
-            default:
-                holder.imgv_serviceIcon.setImageResource(R.drawable.icons8_facial_mask_64);
+                break;
+            case "facial":
+                holder.imgv_serviceIcon.setImageResource(R.drawable.ic_facial_mask_512px);
+            case "perm":
+                holder.imgv_serviceIcon.setImageResource(R.drawable.ic_wavy_hair_512px);
+            case "eyebrow threading":
+                holder.imgv_serviceIcon.setImageResource(R.drawable.ic_eyebrow_512px);
+            case "hairdye":
+                holder.imgv_serviceIcon.setImageResource(R.drawable.ic_haird_dye_512px);
                 break;
         }
     }
@@ -83,4 +93,15 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.MyView
 //            textView = cardBinding.TXTVClientName;
         }
     }
+    private String parseDate(String dt) {
+        SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            Date d = fmt.parse(dt);
+            return fmt.format(d);
+        }
+        catch(ParseException | java.text.ParseException pe) {
+            return "Date";
+        }
+    }
+
 }

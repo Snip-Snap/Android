@@ -1,14 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/CL_report"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".fragment.ReportFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/TXTV_greeting"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="@string/report_center"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-</FrameLayout>
+    <TextView
+        android:id="@+id/TXTV_month_sel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:text="@string/report_by_month"
+        app:layout_constraintStart_toStartOf="@+id/TXTV_greeting"
+        app:layout_constraintTop_toBottomOf="@+id/TXTV_greeting" />
+
+    <Spinner
+        android:id="@+id/spinner_months"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="25dp"
+        app:layout_constraintStart_toEndOf="@+id/TXTV_month_sel"
+        app:layout_constraintTop_toBottomOf="@+id/TXTV_greeting" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/BTN_month_report"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="@string/generate_monthly_report"
+        app:layout_constraintStart_toStartOf="@+id/TXTV_month_sel"
+        app:layout_constraintTop_toBottomOf="@+id/TXTV_month_sel" />
+</androidx.constraintlayout.widget.ConstraintLayout>

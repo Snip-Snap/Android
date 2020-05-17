@@ -21,6 +21,7 @@
     <string name="calendar">Calendar</string>
     <string name="reportScreen">Report</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="report_center">Report Center</string>
+    <string name="report_by_month">Report by month:</string>
+    <string name="generate_monthly_report">Generate Report</string>
 </resources>
