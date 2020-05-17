@@ -26,10 +26,10 @@
         android:layout_height="wrap_content" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/BTN_report"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Button" />
+        android:text="@string/day_report" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/barberRecyclerView"

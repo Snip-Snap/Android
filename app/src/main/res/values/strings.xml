@@ -17,4 +17,5 @@
     <string name="appt_start_time">Start Time</string>
     <string name="service">Service</string>
     <string name="service_icon">Service Icon</string>
+    <string name="day_report">Day report</string>
 </resources>

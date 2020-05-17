@@ -5,6 +5,16 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.graphics.pdf.PdfDocument;
+import android.icu.text.SimpleDateFormat;
+import android.icu.util.Calendar;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -29,17 +39,23 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.itextpdf.text.BaseColor;
+import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
+import com.itextpdf.text.Image;
 import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Phrase;
+import com.itextpdf.text.pdf.PdfChunk;
+import com.itextpdf.text.pdf.PdfIndirectReference;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.snipsnap.android.barbershop.BuildConfig;
 import com.snipsnap.android.barbershop.GetApptByUsernameQuery;
+import com.snipsnap.android.barbershop.R;
 import com.snipsnap.android.barbershop.databinding.FragmentCalendarBinding;
 import com.snipsnap.android.barbershop.helpers.AppointmentModel;
 import com.snipsnap.android.barbershop.helpers.BarberViewModel;
@@ -47,11 +63,17 @@ import com.snipsnap.android.barbershop.helpers.CalendarAdapter;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.OutputStream;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 
 public class CalendarFragment extends Fragment {
@@ -97,7 +119,8 @@ public class CalendarFragment extends Fragment {
         mTxtv_barberName = mCalendarBinding.TXTVBarber;
         mRecyclerView = mCalendarBinding.barberRecyclerView;
 
-        btn = mCalendarBinding.button2;
+        btn = mCalendarBinding.BTNReport;
+        btn.setVisibility(View.INVISIBLE);
 
         // recyclerView.setHasFixedSize(true)
         // Can layout manager and adapter be called in onCreatew?
@@ -128,19 +151,24 @@ public class CalendarFragment extends Fragment {
                 mAdapter = new CalendarAdapter(am);
                 reportList = am;
                 mRecyclerView.setAdapter(mAdapter);
+                if (am.isEmpty()) {
+                    btn.setVisibility(View.INVISIBLE);
+                } else {
+                    btn.setVisibility(View.VISIBLE);
+                }
             });
         });
 
         btn.setOnClickListener(r -> {
             try {
                 createPDFWrapper();
-            } catch (FileNotFoundException | DocumentException e) {
+            } catch (DocumentException | IOException e) {
                 e.printStackTrace();
             }
         });
     }
 
-    private void createPDFWrapper() throws FileNotFoundException, DocumentException {
+    private void createPDFWrapper() throws IOException, DocumentException {
         int hasWriteStoragePermission = ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE);
         if (hasWriteStoragePermission != PackageManager.PERMISSION_GRANTED) {
 
@@ -166,60 +194,137 @@ public class CalendarFragment extends Fragment {
         }
     }
 
-    private void createPdf() throws FileNotFoundException, DocumentException {
-
+    private void createPdf() throws IOException, DocumentException {
         if (reportList.isEmpty()) {
             Log.d(TAG, "reportList is empty");
             return;
         }
 
-
         File filepath = requireContext().getFilesDir();
         File docsFolder = new File(filepath + "/Barber");
         if (!docsFolder.exists()) {
-             if (docsFolder.mkdir()) {
-                 Log.d(TAG, "Created a new directory for PDF");
-             } else {
-                 Log.d(TAG, "Did not create a new directory for PDF");
-             }
+            if (docsFolder.mkdir()) {
+                Log.d(TAG, "Created a new directory for PDF");
+            } else {
+                Log.d(TAG, "Did not create a new directory for PDF");
+            }
         }
 
         String pdfname = "apptReport.pdf";
         pdfFile = new File(docsFolder.getAbsolutePath(), pdfname);
         OutputStream output = new FileOutputStream(pdfFile);
+
+
         Document document = new Document(PageSize.A4);
         PdfPTable table = new PdfPTable(new float[]{3, 3, 3});
+
+        // Handle Table
         table.getDefaultCell().setHorizontalAlignment(Element.ALIGN_CENTER);
         table.getDefaultCell().setFixedHeight(50);
         table.setTotalWidth(PageSize.A4.getWidth());
         table.setWidthPercentage(100);
         table.getDefaultCell().setVerticalAlignment(Element.ALIGN_MIDDLE);
         table.addCell("Client Name");
-//        table.addCell("Price");
 //        table.addCell("Type");
         table.addCell("Service");
-        table.addCell("Date");
+        table.addCell("Price");
+//        table.addCell("Date");
         table.setHeaderRows(1);
         PdfPCell[] cells = table.getRow(0).getCells();
-        for (int j = 0; j < cells.length; j++) {
-            cells[j].setBackgroundColor(BaseColor.GRAY);
+        for (PdfPCell cell : cells) {
+            cell.setBackgroundColor(BaseColor.CYAN);
         }
         //for loop to insert data
+        table.getDefaultCell().setBorder(0);
+        int i = 1;
+        Double total = 0.0d;
         for (AppointmentModel am : reportList) {
             table.addCell(am.cFirstName);
             table.addCell(am.serviceName);
-            table.addCell(am.apptDate);
+            table.addCell(am.price.toString());
+            total += am.price.floatValue();
+            i++;
         }
 
+        int j = 0;
+        for (int k = 1; k < i; k++) {
+            PdfPCell[] infocells = table.getRow(k).getCells();
+            if (j % 2 == 0) {
+                for (PdfPCell cell : infocells) {
+                    cell.setBackgroundColor(BaseColor.LIGHT_GRAY);
+                }
+            }
+            j++;
+        }
+//        bmp = BitmapFactory.decodeResource(getResources(), R.drawable.snipsnap_logo_text);
         PdfWriter.getInstance(document, output);
         document.open();
-        Font f = new Font(Font.FontFamily.TIMES_ROMAN, 30.0f, Font.UNDERLINE, BaseColor.BLUE);
-        Font g = new Font(Font.FontFamily.TIMES_ROMAN, 20.0f, Font.NORMAL, BaseColor.BLUE);
-        document.add(new Paragraph("Pdf Data \n\n", f));
-        document.add(new Paragraph("Pdf File Through Itext", g));
+//        Font f = new Font(Font.FontFamily.TIMES_ROMAN, 30.0f, Font.UNDERLINE, BaseColor.BLUE);
+        Font n = new Font(Font.FontFamily.TIMES_ROMAN, 50.0f, Font.NORMAL);
+        String sname = reportList.get(0).shopName;
+        Paragraph shopName = new Paragraph(sname, n);
+        shopName.setAlignment(Element.ALIGN_CENTER);
+        document.add(shopName);
+
+        Font a = new Font(Font.FontFamily.TIMES_ROMAN, 40.0f, Font.NORMAL);
+        a.setColor(122, 119, 119);
+        String saddr = reportList.get(0).shopAddr;
+        Paragraph shopAddr = new Paragraph(saddr, a);
+        shopAddr.setAlignment(Element.ALIGN_CENTER);
+        document.add(shopAddr);
+
+        Font d = new Font(Font.FontFamily.TIMES_ROMAN, 30.0f, Font.NORMAL);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        String date = sdf.format(new Date());
+        Paragraph reportdate = new Paragraph(date, d);
+        reportdate.setAlignment(Element.ALIGN_CENTER);
+        document.add(reportdate);
+
+        Font bd = new Font(Font.FontFamily.TIMES_ROMAN, 25.0f, Font.NORMAL);
+        String bdesc = "Barber:";
+        Paragraph barberDesc = new Paragraph(bdesc, bd);
+        barberDesc.setAlignment(Element.ALIGN_LEFT);
+        document.add(barberDesc);
+
+        Font b = new Font(Font.FontFamily.TIMES_ROMAN, 20.0f, Font.NORMAL);
+        String bname = reportList.get(0).bFirstName;
+        bname = bname.concat(" " + reportList.get(0).bLastName);
+        Paragraph barberName = new Paragraph(bname, b);
+        barberName.setAlignment(Element.ALIGN_LEFT);
+        document.add(barberName);
+
+        Paragraph newLine = new Paragraph("\n");
+        document.add(newLine);
+
+
+        // Adding an image
+//        Image img = Image.getInstance(bmp):
         document.add(table);
 
+        Double newTotal = BigDecimal.valueOf(total).setScale(2, RoundingMode.HALF_UP).doubleValue();
+        Font t = new Font(Font.FontFamily.TIMES_ROMAN, 25.0f, Font.UNDERLINE);
+        String totallabel = "Day Total: " + newTotal.toString();
+        Paragraph totalLabel= new Paragraph(totallabel, t);
+        totalLabel.setAlignment(Element.ALIGN_RIGHT);
+        document.add(totalLabel);
+        document.add(newLine);
+
+        try {
+            Drawable drawable = requireContext().getDrawable(R.drawable.snipsnap_logo_text_256px);
+            BitmapDrawable bitDw = ((BitmapDrawable) drawable);
+            Bitmap bmp = bitDw.getBitmap();
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
+            Image image = Image.getInstance(stream.toByteArray());
+            image.setAlignment(Element.ALIGN_CENTER);
+            document.add(image);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         document.close();
+
+
         previewPdf();
     }
 
@@ -232,14 +337,10 @@ public class CalendarFragment extends Fragment {
         if (list.size() > 0) {
             Intent intent = new Intent();
             intent.setAction(Intent.ACTION_VIEW);
-
-
             Uri reportURI = FileProvider.getUriForFile(requireContext(),
                     BuildConfig.APPLICATION_ID + ".provider",
                     pdfFile);
-//            Uri uri = Uri.fromFile(pdfFile);
-//            intent.setDataAndType(uri, "application/pdf");
-            intent.setDataAndType(reportURI,"application/pdf");
+            intent.setDataAndType(reportURI, "application/pdf");
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             requireActivity().startActivity(intent);
         } else {
