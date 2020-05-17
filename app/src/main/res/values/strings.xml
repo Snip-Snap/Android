@@ -18,4 +18,9 @@
     <string name="service">Service</string>
     <string name="service_icon">Service Icon</string>
     <string name="day_report">Day report</string>
+    <string name="calendar">Calendar</string>
+    <string name="reportScreen">Report</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

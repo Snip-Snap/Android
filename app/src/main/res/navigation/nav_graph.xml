@@ -42,4 +42,9 @@
             android:name="token"
             app:argType="string" />
     </fragment>
+    <fragment
+        android:id="@+id/reportFragment"
+        android:name="com.snipsnap.android.barbershop.fragment.ReportFragment"
+        android:label="fragment_report"
+        tools:layout="@layout/fragment_report" />
 </navigation>
