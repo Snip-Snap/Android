@@ -275,8 +275,10 @@ public class CalendarFragment extends Fragment {
 
         Font d = new Font(Font.FontFamily.TIMES_ROMAN, 30.0f, Font.NORMAL);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        String reportDate = "Date: ";
         String date = sdf.format(new Date());
-        Paragraph reportdate = new Paragraph(date, d);
+        reportDate = reportDate.concat(date);
+        Paragraph reportdate = new Paragraph(reportDate, d);
         reportdate.setAlignment(Element.ALIGN_CENTER);
         document.add(reportdate);
 

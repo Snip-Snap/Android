@@ -65,11 +65,44 @@ public class BarberViewModel extends ViewModel {
         return mTmpAppointments;
     }
 
+    public LiveData<List<AppointmentModel>> getAppointmentByMonth(String fMonth, String eMonth) {
+        MutableLiveData<List<AppointmentModel>> mTmpAppointments = new MutableLiveData<>();
+        if (mMasterAppointments.getValue().isEmpty()) {
+            Log.d(TAG, "mAppointments is empty");
+            return mTmpAppointments;
+        }
+        List<AppointmentModel> tmpList = new ArrayList<>();
+        mTmpAppointments.setValue(mMasterAppointments.getValue());
+        for (AppointmentModel apptModel : mTmpAppointments.getValue()) {
+            Date dfMonth = parseMonth(fMonth);
+            Date deMonth = parseMonth(eMonth);
+            String dt = apptModel.apptDate;
+            Date selMonth = parseMonthDate(dt);
+            if (selMonth.after(dfMonth) && selMonth.before(deMonth)) {
+                Log.d(TAG, "apptByMonthAdded to list!");
+                tmpList.add(apptModel);
+            }
+        }
+        mTmpAppointments.setValue(tmpList);
+        return mTmpAppointments;
+    }
+
     public void setBarberUsername(String barberName) {
         // postValue because method called within a background thread.
         mBarberUsername.postValue(barberName);
     }
 
+    private Date parseMonth(String dt) {
+        SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            Date d = fmt.parse(dt);
+            return d;
+        }
+        catch(ParseException | java.text.ParseException pe) {
+            // SKETCHY!
+            return new Date(1111111);
+        }
+    }
     private String parseDate(String dt) {
         SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
         try {
@@ -78,6 +111,18 @@ public class BarberViewModel extends ViewModel {
         }
         catch(ParseException | java.text.ParseException pe) {
             return "Date";
+        }
+    }
+    private Date parseMonthDate(String dt) {
+        SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            Date d = fmt.parse(dt);
+            String newDate = fmt.format(d);
+            Date dete = fmt.parse(newDate);
+            return dete;
+        }
+        catch(ParseException | java.text.ParseException pe) {
+            return new Date(1111111);
         }
     }
 

@@ -28,20 +28,47 @@
         app:layout_constraintTop_toBottomOf="@+id/TXTV_greeting" />
 
     <Spinner
-        android:id="@+id/spinner_months"
+        android:id="@+id/spinner_months_start"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="5dp"
-        android:layout_marginTop="25dp"
-        app:layout_constraintStart_toEndOf="@+id/TXTV_month_sel"
-        app:layout_constraintTop_toBottomOf="@+id/TXTV_greeting" />
+        android:layout_marginTop="20dp"
+        app:layout_constraintStart_toEndOf="@+id/TXTV_month_start"
+        app:layout_constraintTop_toBottomOf="@+id/TXTV_month_sel" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/BTN_month_report"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="120dp"
         android:text="@string/generate_monthly_report"
         app:layout_constraintStart_toStartOf="@+id/TXTV_month_sel"
         app:layout_constraintTop_toBottomOf="@+id/TXTV_month_sel" />
+
+    <TextView
+        android:id="@+id/TXTV_month_start"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="28dp"
+        android:text="@string/month_start"
+        app:layout_constraintStart_toStartOf="@+id/TXTV_month_sel"
+        app:layout_constraintTop_toBottomOf="@+id/TXTV_month_sel" />
+
+    <TextView
+        android:id="@+id/TXTV_month_end"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="28dp"
+        android:text="@string/month_end"
+        app:layout_constraintStart_toStartOf="@+id/TXTV_month_start"
+        app:layout_constraintTop_toBottomOf="@+id/TXTV_month_start" />
+
+    <Spinner
+        android:id="@+id/spinner_months_end"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="11dp"
+        android:layout_marginTop="26dp"
+        app:layout_constraintStart_toEndOf="@+id/TXTV_month_end"
+        app:layout_constraintTop_toBottomOf="@+id/spinner_months_start" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -67,3 +67,33 @@ query getApptByUsername($username: String!) {
         }
     }
 }
+query getApptsByDateRange($input: BarberDateRange!) {
+    getAppointmentByDateRange(input: $input) {
+        barber {
+            firstName
+            lastName
+        }
+        shop {
+            shopName
+            streetAddr
+        }
+        appointment {
+            apptDate
+            startTime
+            endTime
+            paymentType
+            clientCancelled
+            barberCancelled
+        }
+        client {
+            firstName
+            lastName
+        }
+        service{
+            serviceName
+            serviceDescription
+            price
+            duration
+        }
+    }
+}

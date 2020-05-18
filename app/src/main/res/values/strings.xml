@@ -24,4 +24,6 @@
     <string name="report_center">Report Center</string>
     <string name="report_by_month">Report by month:</string>
     <string name="generate_monthly_report">Generate Report</string>
+    <string name="month_start">Starting Month</string>
+    <string name="month_end">Ending Month</string>
 </resources>
