@@ -32,7 +32,7 @@
         android:id="@+id/signupFragment"
         android:name="com.snipsnap.android.barbershop.fragment.SignupFragment"
         android:label="fragment_signup"
-        tools:layout="@layout/fragment_signup" />
+        tools:layout="@layout/fragment_signup_base" />
     <fragment
         android:id="@+id/calendarFragment"
         android:name="com.snipsnap.android.barbershop.fragment.CalendarFragment"

@@ -1,24 +1,27 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.MaterialComponents.DayNight">
+    <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">#448AFF</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <style name="snipsnap_logo_big">
+    <style name="register_barber_banner">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginTop">24dp</item>
-        <item name="android:contentDescription">@string/organization_logo</item>
+        <item name="android:textAppearance">
+            @style/TextAppearance.AppCompat.Display2
+        </item>
     </style>
 
-    <style name="snipsnap_icon">
-        <item name="android:layout_width">169dp</item>
-        <item name="android:layout_height">194dp</item>
-        <item name="android:layout_marginTop">100dp</item>
+    <style name="register_barber_logo">
+        <item name="android:layout_width">136dp</item>
+        <item name="android:layout_height">167dp</item>
+        <item name="android:layout_marginTop">10dp</item>
+        <item name="android:contentDescription">@string/organization_logo</item>
     </style>
 
 </resources>

@@ -16,7 +16,7 @@ public class SignupFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_signup,
+        return inflater.inflate(R.layout.fragment_signup_base,
                 container,
                 false);
     }

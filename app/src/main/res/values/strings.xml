@@ -10,7 +10,7 @@
     <string name="sign_up">Sign Up.</string>
     <string name="first_name">First Name</string>
     <string name="last_name">Last Name</string>
-    <string name="register">Register</string>
+    <string name="register">Register barber</string>
     <string name="login">Login</string>
     <string name="barber_name">Huaqing Wang</string>
     <string name="client_name">Client Name</string>
@@ -26,4 +26,8 @@
     <string name="generate_monthly_report">Generate Report</string>
     <string name="month_start">Starting Month</string>
     <string name="month_end">Ending Month</string>
+    <string name="phone_number">Phone Number</string>
+    <string name="gender">Gender</string>
+    <string name="btn_continue">Continue</string>
+    <string name="step_1">Step 1/2</string>
 </resources>

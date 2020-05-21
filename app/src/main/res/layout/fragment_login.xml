@@ -15,7 +15,7 @@
         android:layout_height="167dp"
         android:layout_marginTop="24dp"
         android:contentDescription="@string/organization_logo"
-        android:src="@drawable/snipsnap_word_logo"
+        android:src="@drawable/ic_snipsnap_logo"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"

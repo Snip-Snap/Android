@@ -6,29 +6,11 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.graphics.pdf.PdfDocument;
 import android.icu.text.SimpleDateFormat;
-import android.icu.util.Calendar;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.FileProvider;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import android.os.Environment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -38,8 +20,18 @@ import android.widget.CalendarView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.FileProvider;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewbinding.BuildConfig;
+
 import com.itextpdf.text.BaseColor;
-import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
@@ -47,14 +39,9 @@ import com.itextpdf.text.Font;
 import com.itextpdf.text.Image;
 import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Paragraph;
-import com.itextpdf.text.Phrase;
-import com.itextpdf.text.pdf.PdfChunk;
-import com.itextpdf.text.pdf.PdfIndirectReference;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
-import com.snipsnap.android.barbershop.BuildConfig;
-import com.snipsnap.android.barbershop.GetApptByUsernameQuery;
 import com.snipsnap.android.barbershop.R;
 import com.snipsnap.android.barbershop.databinding.FragmentCalendarBinding;
 import com.snipsnap.android.barbershop.helpers.AppointmentModel;
@@ -65,7 +52,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -83,13 +69,15 @@ public class CalendarFragment extends Fragment {
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
+    private LifecycleOwner lifecycleOwner;
 
     private TextView mTxtv_barberName;
     final private String TAG = "barbershop: calV";
 
     private final int REQUEST_CODE_ASK_PERMISSIONS = 111;
     private File pdfFile;
-    private Button btn;
+    private Button btn_generateReport;
+    private Button btntwo;
     private List<AppointmentModel> reportList;
 
 
@@ -108,6 +96,7 @@ public class CalendarFragment extends Fragment {
                              Bundle savedInstanceState) {
         mCalendarBinding = FragmentCalendarBinding.inflate(inflater,
                 container, false);
+        lifecycleOwner = getViewLifecycleOwner();
         return mCalendarBinding.getRoot();
     }
 
@@ -118,25 +107,14 @@ public class CalendarFragment extends Fragment {
         mCalendar = mCalendarBinding.calendarView;
         mTxtv_barberName = mCalendarBinding.TXTVBarber;
         mRecyclerView = mCalendarBinding.barberRecyclerView;
-
-        btn = mCalendarBinding.BTNReport;
-        btn.setVisibility(View.INVISIBLE);
-
+        btn_generateReport = mCalendarBinding.BTNReport;
+        btn_generateReport.setVisibility(View.INVISIBLE);
+        setCalendarObserver();
+        setBarberNameObserver();
         // recyclerView.setHasFixedSize(true)
         // Can layout manager and adapter be called in onCreatew?
         mLayoutManager = new LinearLayoutManager(requireActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
-
-        mBarberViewModel.getAllAppointments().observe(getViewLifecycleOwner(), am -> {
-            if (am.isEmpty()) {
-                Log.d(TAG, "No barber.");
-                return;
-            }
-            String barberGreeting;
-            barberGreeting = am.get(0).bFirstName;
-            barberGreeting = barberGreeting.concat(" " + am.get(0).bLastName);
-            mTxtv_barberName.setText(barberGreeting);
-        });
     }
 
     @Override
@@ -145,26 +123,43 @@ public class CalendarFragment extends Fragment {
         mCalendar.setOnDateChangeListener((cv, year, month, day) -> {
             month = month + 1;
             String date = year + "-" + month + "-" + day;
-//            Toast toast = Toast.makeText(getContext(), date, Toast.LENGTH_SHORT);
-//            toast.show();
-            mBarberViewModel.getAppointmentByDate(date).observe(getViewLifecycleOwner(), am -> {
-                mAdapter = new CalendarAdapter(am);
-                reportList = am;
-                mRecyclerView.setAdapter(mAdapter);
-                if (am.isEmpty()) {
-                    btn.setVisibility(View.INVISIBLE);
-                } else {
-                    btn.setVisibility(View.VISIBLE);
-                }
-            });
+            mBarberViewModel.setCalendarDate(date);
         });
 
-        btn.setOnClickListener(r -> {
-            try {
-                createPDFWrapper();
-            } catch (DocumentException | IOException e) {
-                e.printStackTrace();
+        btn_generateReport.setOnClickListener(r -> {
+            Toast toast = Toast.makeText(requireContext(),
+                    "In Progress!", Toast.LENGTH_SHORT);
+            toast.show();
+//            try {
+//                createPDFWrapper();
+//            } catch (DocumentException | IOException e) {
+//                e.printStackTrace();
+//            }
+        });
+    }
+
+    @Override
+    public void onDestroyView() {
+        mCalendarBinding = null;
+        super.onDestroyView();
+    }
+
+    private void setCalendarObserver() {
+        mBarberViewModel.getDayAppointments().observe(lifecycleOwner, am -> {
+            mAdapter = new CalendarAdapter(am);
+            reportList = am;
+            mRecyclerView.setAdapter(mAdapter);
+            if (am.isEmpty()) {
+                btn_generateReport.setVisibility(View.INVISIBLE);
+            } else {
+                btn_generateReport.setVisibility(View.VISIBLE);
             }
+        });
+    }
+
+    private void setBarberNameObserver() {
+        mBarberViewModel.getBarberFullName().observe(lifecycleOwner, s -> {
+            mTxtv_barberName.setText(s);
         });
     }
 
@@ -172,23 +167,19 @@ public class CalendarFragment extends Fragment {
         int hasWriteStoragePermission = ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE);
         if (hasWriteStoragePermission != PackageManager.PERMISSION_GRANTED) {
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                if (!shouldShowRequestPermissionRationale(Manifest.permission.WRITE_CONTACTS)) {
-                    showMessageOKCancel("You need to allow access to Storage",
-                            new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                                        requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                                                REQUEST_CODE_ASK_PERMISSIONS);
-                                    }
-                                }
-                            });
-                    return;
-                }
-                requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                        REQUEST_CODE_ASK_PERMISSIONS);
+            if (!shouldShowRequestPermissionRationale(Manifest.permission.WRITE_CONTACTS)) {
+                showMessageOKCancel("You need to allow access to Storage",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                                        REQUEST_CODE_ASK_PERMISSIONS);
+                            }
+                        });
+                return;
             }
+            requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    REQUEST_CODE_ASK_PERMISSIONS);
         } else {
             createPdf();
         }
@@ -306,7 +297,7 @@ public class CalendarFragment extends Fragment {
         Double newTotal = BigDecimal.valueOf(total).setScale(2, RoundingMode.HALF_UP).doubleValue();
         Font t = new Font(Font.FontFamily.TIMES_ROMAN, 25.0f, Font.UNDERLINE);
         String totallabel = "Day Total: " + newTotal.toString();
-        Paragraph totalLabel= new Paragraph(totallabel, t);
+        Paragraph totalLabel = new Paragraph(totallabel, t);
         totalLabel.setAlignment(Element.ALIGN_RIGHT);
         document.add(totalLabel);
         document.add(newLine);
@@ -359,9 +350,4 @@ public class CalendarFragment extends Fragment {
                 .show();
     }
 
-    @Override
-    public void onDestroyView() {
-        mCalendarBinding = null;
-        super.onDestroyView();
-    }
 }

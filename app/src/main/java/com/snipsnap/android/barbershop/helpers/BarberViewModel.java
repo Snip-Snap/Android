@@ -6,6 +6,7 @@ import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 
 import com.apollographql.apollo.ApolloCall;
@@ -30,41 +31,53 @@ public class BarberViewModel extends ViewModel {
     final private ApolloClient mApolloClient = ApolloClient.builder().serverUrl(myUrl).build();
 
     private MutableLiveData<String> mBarberUsername = new MutableLiveData<>();
-    private MutableLiveData<String> mBarberFullName = new MutableLiveData<>();
+    private MutableLiveData<String> mDate = new MutableLiveData<>();
     private MutableLiveData<List<AppointmentModel>> mMasterAppointments = new MutableLiveData<>();
-
-    public LiveData<List<AppointmentModel>> getAllAppointments() {
-        return mMasterAppointments;
-    }
+    private MutableLiveData<List<AppointmentModel>> mDayAppointments = new MutableLiveData<>();
+    private LiveData<String> mBarberFullName = Transformations.map(mMasterAppointments, ams -> {
+        String fullName = ams.get(0).bFirstName;
+        fullName = fullName.concat(" " + ams.get(0).bLastName);
+        return fullName;
+    });
 
     public LiveData<String> getBarberFullName() {
-        // Throws null pointer exception!
-        String fullName = mMasterAppointments.getValue().get(0).bFirstName;
-        fullName = fullName.concat(" " +mMasterAppointments.getValue().get(0).bLastName);
-        mBarberFullName.setValue(fullName);
         return mBarberFullName;
     }
 
-    public LiveData<List<AppointmentModel>> getAppointmentByDate(String date) {
-        MutableLiveData<List<AppointmentModel>> mTmpAppointments = new MutableLiveData<>();
-        if (mMasterAppointments.getValue().isEmpty()) {
-            Log.d(TAG, "mAppointments is empty");
-            return mTmpAppointments;
-        }
+    public LiveData<List<AppointmentModel>> getDayAppointments() {
+        return mDayAppointments;
+    }
+
+    public void setCalendarDate(String date) {
+        mDate.setValue(date);
+        filterAppointmentsByDate();
+    }
+
+    private void filterAppointmentsByDate() {
+        if (appointmentsAreNull()) return;
         List<AppointmentModel> tmpList = new ArrayList<>();
-        mTmpAppointments.setValue(mMasterAppointments.getValue());
-        for (AppointmentModel apptModel : mTmpAppointments.getValue()) {
-            date = parseDate(date);
-            String dt = apptModel.apptDate;
-            dt = parseDate(dt);
-            if (date.equals(dt)) {
+        for (AppointmentModel apptModel : mMasterAppointments.getValue()) {
+            // Look into parsing dates and times at the API level.
+            // Don't parse data at the android level!
+            String viewModelDate = parseDate(mDate.getValue());
+            String apptDate = apptModel.apptDate;
+            apptDate = parseDate(apptDate);
+            if (viewModelDate.equals(apptDate)) {
                 tmpList.add(apptModel);
             }
         }
-        mTmpAppointments.setValue(tmpList);
-        return mTmpAppointments;
+        mDayAppointments.setValue(tmpList);
     }
 
+    private boolean appointmentsAreNull() {
+        if (mMasterAppointments.getValue() == null) {
+            Log.d(TAG, "mMasterAppointments is null");
+            return true;
+        }
+        return false;
+    }
+
+    // REFACTOR
     public LiveData<List<AppointmentModel>> getAppointmentByMonth(String fMonth, String eMonth) {
         MutableLiveData<List<AppointmentModel>> mTmpAppointments = new MutableLiveData<>();
         if (mMasterAppointments.getValue().isEmpty()) {
@@ -92,27 +105,29 @@ public class BarberViewModel extends ViewModel {
         mBarberUsername.postValue(barberName);
     }
 
+    // REFACTOR parseMonth and parseDate into one function? (str ,typeOfDate)?
+    //  Or, just parse at the api level.
     private Date parseMonth(String dt) {
         SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
         try {
             Date d = fmt.parse(dt);
             return d;
-        }
-        catch(ParseException | java.text.ParseException pe) {
+        } catch (ParseException | java.text.ParseException pe) {
             // SKETCHY!
             return new Date(1111111);
         }
     }
+
     private String parseDate(String dt) {
         SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
         try {
             Date d = fmt.parse(dt);
             return fmt.format(d);
-        }
-        catch(ParseException | java.text.ParseException pe) {
+        } catch (ParseException | java.text.ParseException pe) {
             return "Date";
         }
     }
+
     private Date parseMonthDate(String dt) {
         SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
         try {
@@ -120,8 +135,7 @@ public class BarberViewModel extends ViewModel {
             String newDate = fmt.format(d);
             Date dete = fmt.parse(newDate);
             return dete;
-        }
-        catch(ParseException | java.text.ParseException pe) {
+        } catch (ParseException | java.text.ParseException pe) {
             return new Date(1111111);
         }
     }

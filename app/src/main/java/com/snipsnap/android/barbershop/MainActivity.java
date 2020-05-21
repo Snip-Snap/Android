@@ -28,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
             switch (destination.getId()) {
                 case R.id.mainFragment:
                 case R.id.loginFragment:
+                case R.id.signupFragment:
                     bottomNav.setVisibility(View.INVISIBLE);
                     break;
                 default:
