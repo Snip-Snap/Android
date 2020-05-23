@@ -13,12 +13,14 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        val navController = Navigation.findNavController(this, R.id.nav_host_fragment)
+        val navController =
+            Navigation.findNavController(this, R.id.nav_host_fragment)
         val bottomNav = findViewById<BottomNavigationView>(R.id.bottom_nav)
         NavigationUI.setupWithNavController(bottomNav, navController)
-        navController.addOnDestinationChangedListener { controller: NavController?, destination: NavDestination, arguments: Bundle? ->
+        navController.addOnDestinationChangedListener { _: NavController?, destination: NavDestination, _: Bundle? ->
             when (destination.id) {
-                R.id.mainFragment, R.id.loginFragment, R.id.signupFragment -> bottomNav.visibility = View.INVISIBLE
+                R.id.mainFragment, R.id.loginFragment, R.id.signupFragment -> bottomNav.visibility =
+                    View.INVISIBLE
                 else -> runOnUiThread { bottomNav.visibility = View.VISIBLE }
             }
         }
