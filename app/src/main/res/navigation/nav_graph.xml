@@ -32,7 +32,11 @@
         android:id="@+id/signupFragment"
         android:name="com.snipsnap.android.barbershop.fragment.SignupFragment"
         android:label="fragment_signup"
-        tools:layout="@layout/fragment_signup_base" />
+        tools:layout="@layout/fragment_signup_page1" >
+        <action
+            android:id="@+id/action_signupFragment_to_signup2Fragment"
+            app:destination="@id/signup2Fragment" />
+    </fragment>
     <fragment
         android:id="@+id/calendarFragment"
         android:name="com.snipsnap.android.barbershop.fragment.CalendarFragment"
@@ -47,4 +51,13 @@
         android:name="com.snipsnap.android.barbershop.fragment.ReportFragment"
         android:label="fragment_report"
         tools:layout="@layout/fragment_report" />
+    <fragment
+        android:id="@+id/signup2Fragment"
+        android:name="com.snipsnap.android.barbershop.fragment.Signup2Fragment"
+        android:label="fragment_signup_page2"
+        tools:layout="@layout/fragment_signup_page2" >
+        <action
+            android:id="@+id/action_signup2Fragment_to_calendarFragment"
+            app:destination="@id/calendarFragment" />
+    </fragment>
 </navigation>

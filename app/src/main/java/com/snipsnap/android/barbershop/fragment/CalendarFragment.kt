@@ -28,7 +28,8 @@ class CalendarFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        barberViewModel.loadBarberAppointments()
+        barberViewModel.fetchBarber()
+        barberViewModel.fetchAppointments()
     }
 
     override fun onCreateView(
@@ -85,7 +86,10 @@ class CalendarFragment : Fragment() {
     }
 
     private fun setBarberNameObserver() {
-        barberViewModel.barberFullName.observe(lifecycleOwner,
-            Observer { cBinding.TXTVBarber.text = it })
+        barberViewModel.currentBarber.observe(lifecycleOwner,
+            Observer {
+                val fullName = "${it.firstName} ${it.lastName}"
+                cBinding.TXTVBarber.text = fullName
+            })
     }
 }

@@ -19,7 +19,8 @@ class MainActivity : AppCompatActivity() {
         NavigationUI.setupWithNavController(bottomNav, navController)
         navController.addOnDestinationChangedListener { _: NavController?, destination: NavDestination, _: Bundle? ->
             when (destination.id) {
-                R.id.mainFragment, R.id.loginFragment, R.id.signupFragment -> bottomNav.visibility =
+                R.id.mainFragment, R.id.loginFragment, R.id.signupFragment,
+                R.id.signup2Fragment -> bottomNav.visibility =
                     View.INVISIBLE
                 else -> runOnUiThread { bottomNav.visibility = View.VISIBLE }
             }

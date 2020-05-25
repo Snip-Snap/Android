@@ -38,7 +38,7 @@ class ReportFragment : Fragment(), OnItemSelectedListener {
 
     override fun onResume() {
         super.onResume()
-        rBinding.BTNMonthReport.setOnClickListener { d: View? ->
+        rBinding.BTNMonthReport.setOnClickListener {
             val toast = Toast.makeText(requireContext(),
                 "Under Construction!", Toast.LENGTH_SHORT)
             toast.show()

@@ -23,6 +23,7 @@ class LoginFragment : Fragment() {
     private val TAG = "barbershop: login"
     private var tmpLoginBinding: FragmentLoginBinding? = null
     private val lBinding get() = tmpLoginBinding!!
+
     // Has to be activityViewModels because the VM is being shared
     //  among all of my fragments!
     private val barberViewModel: BarberViewModel by activityViewModels()
@@ -32,8 +33,7 @@ class LoginFragment : Fragment() {
                               container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         tmpLoginBinding = FragmentLoginBinding.inflate(inflater,
-            container,
-            false)
+            container, false)
         return lBinding.root
     }
 
@@ -112,3 +112,4 @@ class LoginFragment : Fragment() {
         get() = lBinding.ETXTUsername.text.toString().isEmpty() ||
             lBinding.ETXTPassword.text.toString().isEmpty()
 }
+

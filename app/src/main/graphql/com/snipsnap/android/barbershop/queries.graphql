@@ -27,17 +27,7 @@ mutation SignUpBarber($input: NewBarber!) {
     }
 }
 
-query GetBarberByID($id:ID!) {
-    getBarberByID(id:$id) {
-        barberID
-        shopID
-        userName
-        firstName
-        lastName
-    }
-}
-
-query getApptByUsername($username: String!) {
+query GetApptByUsername($username: String!) {
     getAppointmentsByUsername(username: $username) {
         barber {
             firstName
@@ -67,7 +57,7 @@ query getApptByUsername($username: String!) {
         }
     }
 }
-query getApptsByDateRange($input: BarberDateRange!) {
+query GetApptsByDateRange($input: BarberDateRange!) {
     getAppointmentByDateRange(input: $input) {
         barber {
             firstName
@@ -95,5 +85,20 @@ query getApptsByDateRange($input: BarberDateRange!) {
             price
             duration
         }
+    }
+}
+query GetBarberByUsername($username: String!){
+    getBarberByUsername(username: $username) {
+        barberID
+        shopID
+        userName
+        firstName
+        lastName
+        PhoneNumber
+        gender
+        dob
+        hireDate
+        dismissDate
+        seatNum
     }
 }
