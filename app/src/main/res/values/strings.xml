@@ -30,4 +30,6 @@
     <string name="gender">Gender</string>
     <string name="btn_continue">Continue</string>
     <string name="step_1">Step 1/2</string>
+    <string name="details">Details</string>
+    <string name="card_details">Card Details</string>
 </resources>

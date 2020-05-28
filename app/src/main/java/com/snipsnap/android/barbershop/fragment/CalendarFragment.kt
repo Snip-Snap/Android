@@ -56,6 +56,12 @@ class CalendarFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
+
+//        val view =
+//            layoutInflater.inflate(R.layout.popup_card_details, null)
+//        val window = PopupWindow(view, 100, 100)
+//        window.showAtLocation(cBinding.LLCalendar, Gravity.CENTER, 0,0)
+
         cBinding.calendarView.setOnDateChangeListener { _: CalendarView?, year: Int, month: Int, day: Int ->
             val mon = month + 1
             val date = "$year-$mon-$day"

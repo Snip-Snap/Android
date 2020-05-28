@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/MCV_appointmentCards"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -55,9 +54,9 @@
             android:id="@+id/TXTV_client_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="3dp"
+            android:layout_marginTop="10dp"
             android:text="@string/client_name"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/BTN_details"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/vert_line2"
             app:layout_constraintTop_toTopOf="parent" />
@@ -68,21 +67,21 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="3dp"
             android:text="@string/appt_start_time"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/BTN_details"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/vert_line2"
             app:layout_constraintTop_toBottomOf="@+id/TXTV_client_name" />
 
-        <TextView
-            android:id="@+id/TXTV_service_done"
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/BTN_details"
+            style="?materialButtonOutlinedStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/service"
-            android:visibility="invisible"
+            android:layout_marginEnd="17dp"
+            android:text="@string/details"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/vert_line2" />
+            app:layout_constraintTop_toTopOf="parent" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

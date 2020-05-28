@@ -16,7 +16,6 @@ class CalendarAdapter(private val mAppointmentList: List<AppointmentModel>) : Re
         val apptModel = mAppointmentList[position]
         val fullName = "${apptModel.cFirstName} ${apptModel.cLastName}"
         holder.txtvClientname.text = fullName
-        holder.txtvService.text = apptModel.serviceName
         holder.txtvStartTime.text = apptModel.startTime
         setServiceIcon(holder, apptModel.serviceName)
     }
@@ -35,8 +34,6 @@ class CalendarAdapter(private val mAppointmentList: List<AppointmentModel>) : Re
     class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val txtvClientname: TextView =
             itemView.findViewById(R.id.TXTV_client_name)
-        val txtvService: TextView =
-            itemView.findViewById(R.id.TXTV_service_done)
         val txtvStartTime: TextView =
             itemView.findViewById(R.id.TXTV_appt_start_time)
         val imgvServiceIcon: ImageView =

@@ -66,13 +66,6 @@ class BarberViewModel : ViewModel() {
     private val mMasterAppointments = MutableLiveData<List<AppointmentModel>>()
     private val mDayAppointments = MutableLiveData<List<AppointmentModel>>()
     private val mBarber = MutableLiveData<BarberModel>()
-//    val barberFullName =
-//        Transformations.map(mMasterAppointments) {
-//            it?.let { // This approach seems unnecessary...a nested lambda...
-//                "${it[0].bFirstName} ${it[0].bLastName}"
-//            }
-//            "${it[0].bFirstName} ${it[0].bLastName}"
-//        }
 
     fun fetchBarber() {
         val barberUsername: String = mBarberUsername.value ?: return

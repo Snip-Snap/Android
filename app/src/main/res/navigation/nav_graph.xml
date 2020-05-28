@@ -26,7 +26,9 @@
         <action
             android:id="@+id/action_loginFragment_to_calendarFragment"
             app:destination="@id/calendarFragment"
-            app:enterAnim="@anim/fragment_open_enter" />
+            app:enterAnim="@anim/fragment_open_enter"
+            app:popUpTo="@id/mainFragment"
+            />
     </fragment>
     <fragment
         android:id="@+id/signupFragment"
