@@ -13,6 +13,7 @@ import androidx.navigation.Navigation
 import com.apollographql.apollo.ApolloCall
 import com.apollographql.apollo.api.Response
 import com.apollographql.apollo.exception.ApolloException
+import com.google.android.material.snackbar.Snackbar
 import com.snipsnap.android.barbershop.LoginBarberMutation
 import com.snipsnap.android.barbershop.databinding.FragmentLoginBinding
 import com.snipsnap.android.barbershop.helpers.ApolloClientNetwork
@@ -41,9 +42,10 @@ class LoginFragment : Fragment() {
         super.onResume()
         lBinding.BTNLogin.setOnClickListener {
             if (isInputNull) {
-                val toast = Toast.makeText(context,
-                    "Requires Username and Password", Toast.LENGTH_SHORT)
-                toast.show()
+                val msg = "Requires Username and Password"
+                val snackbar = Snackbar.make(lBinding.BTNLogin, msg,
+                Snackbar.LENGTH_SHORT)
+                snackbar.show()
                 return@setOnClickListener
             }
             val username = "${lBinding.ETXTUsername.text}"
@@ -69,9 +71,10 @@ class LoginFragment : Fragment() {
                         if (login.error.contains(errStr)) {
                             requireActivity().runOnUiThread {
                                 val text = "Incorrect Username or Password"
-                                val dur = Toast.LENGTH_SHORT
-                                Toast.makeText(requireContext(), text, dur)
-                                    .show()
+                                val snackbar =
+                                        Snackbar.make(lBinding.BTNLogin, text,
+                                        Snackbar.LENGTH_SHORT)
+                                snackbar.show()
                             }
                             return
                         }
